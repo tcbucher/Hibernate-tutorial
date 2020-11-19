@@ -4,10 +4,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class PrimaryKeyDemo
+public class CreateStudentDemo
 {
     public static void main(String[] args)
     {
@@ -16,24 +13,22 @@ public class PrimaryKeyDemo
                 .addAnnotatedClass(Student.class)
                 .buildSessionFactory();
 
-        List<Student> students = new ArrayList<>();
-        students.add(new Student("Larry", "Fine", "Bonk@hotmail.com"));
-        students.add(new Student("Shemp", "Howard", "nyuk@hotmail.com"));
-        students.add(new Student("Moe", "Howard", "lookhereyou@hotmail.com"));
+        Session session = factory.getCurrentSession();
 
         try (factory)
         {
-            Session session = factory.getCurrentSession();
+            Student tempStudent = new Student("John", "Doe", "johnnyd@hotmail.co.uk");
+
+            //Start transaction
             session.beginTransaction();
 
-            for (Student student : students)
-            {
-                session.save(student);
-            }
+            //save the student
+            session.save(tempStudent);
 
+            // commit the transaction
+            // We can also rollback if something went wrong
             session.getTransaction().commit();
         }
-
 
     }
 }
