@@ -3,11 +3,10 @@ package com.timbucher.hibernate.demo.entity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.query.Query;
 
 import java.util.List;
 
-public class QueryStudentDemo
+public class UpdateStudentDemo
 {
     public static void main(String[] args)
     {
@@ -17,29 +16,28 @@ public class QueryStudentDemo
                 .buildSessionFactory();
 
         Session session = factory.getCurrentSession();
-
-        List<Student> students;
+        Student student;
 
         try (factory)
         {
-            //Start transaction
+            // Start transaction
             session.beginTransaction();
 
-            //query the student
-            students = session.createQuery("from Student where lastName = 'Howard'").getResultList();
+            // Retrieve the student from the database
+            student = session.get(Student.class, 4);
 
-            // commit the transaction
-            // We can also rollback if something went wrong
+            // Update the student
+            student.setFirstName("Curly");
+
+            // Commit the transaction
             session.getTransaction().commit();
         }
 
-        for (Student student: students)
-        {
             System.out.println("Student info: " + student.getId());
             System.out.println("First Name: " + student.getFirstName());
             System.out.println("Last Name: " + student.getLastName());
             System.out.println("Email Address: " + student.getEmail());
             System.out.println();
-        }
+
     }
 }
